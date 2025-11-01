@@ -1,24 +1,18 @@
-import React from "react";
-import { createStructuredSelector } from "reselect";
+import React,  { useContext }  from "react";
 import { Link } from "react-router-dom";
 
 import "./header.component.style.scss";
 import { ReactComponent as Logo } from "../../asset/crown.svg";
-import CartIcon from "../cart-icon/cart-icon.component";
-import CartDropDown from "../cart-dropdown/cart-dropdown.component";
+import CartIconContainer from "../cart-icon/cart-icon-container";
+import CartDropDownContainer from "../cart-dropdown/cart-dropdown-container";
 
-import { useSelector, useDispatch } from "react-redux";
-import { signOutAuth } from "../../redux/user/user-action";
-import { selectCurrentUser } from "../../redux/user/user-selector";
-import { selectHidden } from "../../redux/cart/cart-selector";
+// import { CartContext } from "../../provider/cart/cart-context";
+import CurrentUser from "../../user/user.context";
+import { auth } from "../../firebase/firebase.utils";
 
-const Header = () => {
-  const StructuredSelector = createStructuredSelector({
-    hidden: selectHidden,
-    currentUser: selectCurrentUser,
-  });
-  const { currentUser, hidden } = useSelector(StructuredSelector);
-  const dispatch = useDispatch();
+const Header = ({hidden}) => {
+ const {currentUser} = useContext(CurrentUser)
+  // const {hidden} = useContext(CartContext)
 
   return (
     <div className="header">
@@ -34,7 +28,7 @@ const Header = () => {
           Contact
         </Link>
         {currentUser ? (
-          <div className="option" onClick={() => dispatch(signOutAuth())}>
+          <div className="option" onClick={() => auth.signOut()}>
             Sign Out
           </div>
         ) : (
@@ -42,9 +36,9 @@ const Header = () => {
             Sign In
           </Link>
         )}
-        <CartIcon />
+        <CartIconContainer />
       </div>
-      {hidden ? null : <CartDropDown />}
+      {hidden ? null : <CartDropDownContainer />}
     </div>
   );
 };

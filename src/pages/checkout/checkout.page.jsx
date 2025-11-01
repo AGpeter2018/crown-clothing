@@ -1,18 +1,14 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { createStructuredSelector } from "reselect";
-import { selectItems, selectCartTotal } from "../../redux/cart/cart-selector";
+import React, { useContext } from "react";
 
-import CheckoutItem from "../../components/checkout-item-component/checkout.component";
+import CheckoutItemContainer from "../../components/checkout-item-component/checkout-item-container";
+
+// import { CartContext } from "../../provider/cart/cart-context";
 
 import "./checkout.style.scss";
 
-const Checkout = () => {
-  const structuredSelector = createStructuredSelector({
-    cartItem: selectItems,
-    total: selectCartTotal,
-  });
-  const { cartItem, total } = useSelector(structuredSelector);
+const Checkout = ({cartItems, cartTotal}) => {
+
+  // const {  cartTotal, cartItems } = useContext(CartContext);
   return (
     <div className="checkout-page">
       <div className="checkout-header">
@@ -32,11 +28,11 @@ const Checkout = () => {
           <span>Remove</span>
         </div>
       </div>
-      {cartItem.map((cartItem) => (
-        <CheckoutItem key={cartItem.id} cartItem={cartItem} />
+      {cartItems.map((cartItem) => (
+        <CheckoutItemContainer key={cartItem.id} cartItem={cartItem} />
       ))}
       <div className="total">
-        <span>Total: ${total}</span>
+        <span>Total: ${cartTotal}</span>
       </div>
     </div>
   );
